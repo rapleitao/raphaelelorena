@@ -1,0 +1,714 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>Nosso Site Especial</title>
+<link href="https://fonts.googleapis.com/css2?family=Dancing+Script:wght@600&family=Playfair+Display:wght@400;700&family=Great+Vibes&display=swap" rel="stylesheet">
+
+<style>
+  *{margin:0;padding:0;box-sizing:border-box}
+  body{
+    min-height:100vh;
+    overflow-x:hidden;
+    position:relative;
+    font-family: 'Playfair Display', serif;
+    color:#333;
+    background: linear-gradient(135deg, #ffeef7 0%, #e8d5ff 25%, #ffd6e7 50%, #f0e6ff 75%, #fff5f8 100%);
+    background-size: 400% 400%;
+    animation: gradientShift 8s ease-in-out infinite;
+  }
+
+  @keyframes gradientShift {
+    0% { background-position: 0% 50%; }
+    50% { background-position: 100% 50%; }
+    100% { background-position: 0% 50%; }
+  }
+
+  /* Partículas brilhantes */
+  .sparkles {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    pointer-events: none;
+    z-index: 1;
+  }
+
+  .sparkle {
+    position: absolute;
+    width: 4px;
+    height: 4px;
+    background: radial-gradient(circle, #fff 0%, #ffb3d9 50%, transparent 70%);
+    border-radius: 50%;
+    animation: sparkleFloat 6s linear infinite;
+    opacity: 0;
+  }
+
+  @keyframes sparkleFloat {
+    0% { 
+      opacity: 0;
+      transform: translateY(100vh) scale(0);
+    }
+    10% {
+      opacity: 1;
+      transform: translateY(90vh) scale(1);
+    }
+    90% {
+      opacity: 1;
+      transform: translateY(10vh) scale(1);
+    }
+    100% {
+      opacity: 0;
+      transform: translateY(0) scale(0);
+    }
+  }
+
+  /* Bandeiras ao fundo: apenas contorno, bem suave */
+  .flags-bg{
+    position:fixed;
+    inset:0;
+    z-index:0;
+    pointer-events:none;
+    opacity:.06;
+  }
+  .flags-bg svg{
+    position:absolute;
+    width:min(60vw,900px);
+    height:auto;
+    filter:contrast(0.9) saturate(0.6);
+    stroke:#000;
+    fill:none;
+    stroke-width:2;
+  }
+  .flag-korea{
+    top:5%;
+    left:50%;
+    transform:translateX(-50%);
+    opacity:.7;
+  }
+  .flag-botafogo{
+    bottom:5%;
+    left:50%;
+    transform:translateX(-50%);
+    opacity:.7;
+  }
+
+  .container{
+    position:relative; 
+    z-index:2; 
+    max-width:1200px; 
+    margin:0 auto; 
+    padding:20px; 
+    text-align:center; 
+    opacity: 0;
+    transform: translateY(30px);
+    animation: fadeInSlide 1.5s ease-out 0.3s forwards;
+  }
+
+  @keyframes fadeInSlide {
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+
+  header{
+    padding:30px 0;
+    opacity: 0;
+    transform: translateY(20px);
+    animation: fadeInSlide 1.2s ease-out 0.6s forwards;
+  }
+
+  h1{
+    font-size:3.5rem; 
+    margin-bottom:20px; 
+    color:#d1006b; 
+    font-family:'Great Vibes',cursive; 
+    text-shadow:2px 2px 8px rgba(209,0,107,.3);
+    opacity: 0;
+    transform: scale(0.8);
+    animation: titleMagic 1.8s ease-out 0.9s forwards;
+  }
+
+  @keyframes titleMagic {
+    0% {
+      opacity: 0;
+      transform: scale(0.8) rotateY(-15deg);
+    }
+    60% {
+      opacity: 0.8;
+      transform: scale(1.05) rotateY(5deg);
+    }
+    100% {
+      opacity: 1;
+      transform: scale(1) rotateY(0deg);
+    }
+  }
+
+  .buttons{
+    display:flex; 
+    justify-content:center; 
+    gap:20px; 
+    flex-wrap:wrap; 
+    margin-bottom:40px;
+  }
+
+  .btn{
+    padding:16px 32px; 
+    background:linear-gradient(135deg, #ff80b3 0%, #e066a3 50%, #cc0052 100%);
+    color:#fff; 
+    border:none; 
+    border-radius:35px; 
+    cursor:pointer; 
+    font-size:1.1rem; 
+    font-weight:600;
+    font-family: 'Playfair Display', serif;
+    transition:all .4s cubic-bezier(0.175, 0.885, 0.32, 1.275); 
+    box-shadow:0 6px 20px rgba(204,0,82,.25);
+    position: relative;
+    overflow: hidden;
+    opacity: 0;
+    transform: translateY(20px);
+    animation: buttonAppear 1s ease-out forwards;
+  }
+
+  .btn:nth-child(1) { animation-delay: 1.2s; }
+  .btn:nth-child(2) { animation-delay: 1.4s; }
+  .btn:nth-child(3) { animation-delay: 1.6s; }
+  .btn:nth-child(4) { animation-delay: 1.8s; }
+
+  @keyframes buttonAppear {
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+
+  .btn::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: -100%;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(90deg, transparent, rgba(255,255,255,0.3), transparent);
+    transition: left 0.6s;
+  }
+
+  .btn:hover::before {
+    left: 100%;
+  }
+
+  .btn:hover{
+    transform:translateY(-5px) scale(1.08); 
+    box-shadow:0 12px 30px rgba(204,0,82,.4);
+    background:linear-gradient(135deg, #ff99c7 0%, #f066b3 50%, #d1006b 100%);
+  }
+
+  .petals-btn{
+    background:linear-gradient(135deg, #ffccd9 0%, #ff80b3 50%, #ff4d94 100%); 
+    font-size:1.2rem;
+    position: relative;
+  }
+
+  .petals-btn::after{
+    content:"🌸";
+    margin-left: 8px;
+    display: inline-block;
+    animation: petalSpin 2s ease-in-out infinite;
+  }
+
+  @keyframes petalSpin {
+    0%, 100% { transform: rotate(0deg) scale(1); }
+    50% { transform: rotate(10deg) scale(1.1); }
+  }
+
+  .main-content{
+    padding:40px; 
+    background:rgba(255,255,255,.92); 
+    border-radius:30px;
+    box-shadow:0 15px 45px rgba(0,0,0,.12); 
+    margin-bottom:40px; 
+    backdrop-filter: blur(10px);
+    border: 1px solid rgba(255,255,255,.3);
+    opacity: 0;
+    transform: translateY(40px);
+    animation: contentSlideIn 1.5s ease-out 2s forwards;
+  }
+
+  @keyframes contentSlideIn {
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+
+  .message{
+    font-size:1.4rem; 
+    line-height:1.8; 
+    margin-bottom:20px; 
+    font-family:'Dancing Script',cursive;
+    color: #8b0045;
+  }
+
+  .heart{
+    color:#ff4d94; 
+    font-size:2.2rem; 
+    animation:heartPulse 2s infinite;
+    display: inline-block;
+  }
+
+  @keyframes heartPulse{
+    0%, 100%{transform:scale(1)}
+    50%{transform:scale(1.3) rotate(5deg)}
+  }
+
+  footer{
+    margin-top:40px; 
+    padding:25px; 
+    color:#d1006b; 
+    font-size:1.1rem; 
+    font-family:'Dancing Script',cursive;
+    background: rgba(255,255,255,.1);
+    border-radius: 20px;
+    backdrop-filter: blur(5px);
+    opacity: 0;
+    transform: translateY(20px);
+    animation: fadeInSlide 1.2s ease-out 2.5s forwards;
+  }
+
+  .signature {
+    margin-top: 15px;
+    font-size: 1.3rem;
+    color: #8b0045;
+    font-weight: 600;
+    text-shadow: 1px 1px 3px rgba(139,0,69,.2);
+  }
+
+  /* Timeline com molduras polaroid */
+  .timeline {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+    gap: 30px;
+    padding: 20px;
+  }
+
+  .timeline-item {
+    opacity: 0;
+    transform: translateY(30px) rotateX(15deg);
+    animation: timelineItemAppear 0.8s ease-out forwards;
+  }
+
+  .timeline-item:nth-child(odd) { animation-delay: 0.1s; }
+  .timeline-item:nth-child(even) { animation-delay: 0.3s; }
+
+  @keyframes timelineItemAppear {
+    to {
+      opacity: 1;
+      transform: translateY(0) rotateX(0deg);
+    }
+  }
+
+  .polaroid {
+    background: #fff;
+    padding: 15px 15px 60px 15px;
+    border-radius: 5px;
+    box-shadow: 0 8px 25px rgba(0,0,0,.15);
+    transform: rotate(0deg);
+    transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+    position: relative;
+    cursor: pointer;
+  }
+
+  .polaroid:hover {
+    transform: rotate(2deg) scale(1.05);
+    box-shadow: 0 15px 40px rgba(0,0,0,.25);
+  }
+
+  .polaroid:nth-child(even):hover {
+    transform: rotate(-2deg) scale(1.05);
+  }
+
+  .polaroid-photo {
+    width: 100%;
+    height: 200px;
+    background: linear-gradient(135deg, #f0f0f0, #e0e0e0);
+    border-radius: 3px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 3rem;
+    margin-bottom: 15px;
+    position: relative;
+    overflow: hidden;
+  }
+
+  .polaroid-photo::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: -100%;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(90deg, transparent, rgba(255,255,255,0.6), transparent);
+    animation: photoShine 3s ease-in-out infinite;
+  }
+
+  @keyframes photoShine {
+    0% { left: -100%; }
+    50% { left: 100%; }
+    100% { left: 100%; }
+  }
+
+  .polaroid-caption {
+    position: absolute;
+    bottom: 15px;
+    left: 15px;
+    right: 15px;
+    font-family: 'Dancing Script', cursive;
+    font-size: 1.2rem;
+    color: #666;
+    text-align: center;
+    line-height: 1.4;
+  }
+
+  .poem-container {
+    font-family:'Dancing Script', cursive; 
+    font-size:1.6rem; 
+    line-height:2.2; 
+    background:rgba(255,240,245,.95); 
+    padding:40px; 
+    border-radius:25px; 
+    box-shadow:0 10px 30px rgba(0,0,0,.1);
+    backdrop-filter: blur(10px);
+    border: 2px solid rgba(255,182,193,.3);
+    opacity: 0;
+    transform: scale(0.9);
+    animation: poemAppear 1.5s ease-out 0.5s forwards;
+  }
+
+  @keyframes poemAppear {
+    to {
+      opacity: 1;
+      transform: scale(1);
+    }
+  }
+
+  .golden-page {
+    opacity: 0;
+    transform: translateY(40px);
+    animation: goldenAppear 1.5s ease-out 0.5s forwards;
+  }
+
+  @keyframes goldenAppear {
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+
+  .golden-container {
+    background: rgba(255,255,255,.95);
+    border-radius: 25px;
+    padding: 30px;
+    box-shadow: 0 15px 40px rgba(0,0,0,.15);
+    backdrop-filter: blur(10px);
+    border: 2px solid rgba(255,182,193,.2);
+  }
+
+  .golden-image {
+    width: 100%;
+    max-width: 500px;
+    height: auto;
+    border-radius: 20px;
+    box-shadow: 0 10px 30px rgba(0,0,0,.2);
+    margin-bottom: 20px;
+  }
+
+  .ribbon {
+    font-family:'Dancing Script', cursive; 
+    font-size:2rem; 
+    color:#d1006b;
+    text-shadow: 2px 2px 4px rgba(209,0,107,.2);
+    margin-top: 20px;
+    animation: ribbonGlow 2s ease-in-out infinite alternate;
+  }
+
+  @keyframes ribbonGlow {
+    from { text-shadow: 2px 2px 4px rgba(209,0,107,.2); }
+    to { text-shadow: 2px 2px 15px rgba(209,0,107,.5); }
+  }
+
+  /* Flores de cerejeira melhoradas */
+  .blossom{
+    position:fixed;
+    top:-60px;
+    left:0;
+    z-index:3;
+    pointer-events:none;
+    animation:fall linear forwards;
+    will-change: transform, opacity;
+  }
+  .blossom-inner{
+    display:block;
+    width:100%;
+    height:100%;
+    animation:sway ease-in-out infinite;
+    transform-origin:center;
+    filter: drop-shadow(0 2px 4px rgba(255,154,193,.3));
+  }
+  @keyframes fall{
+    to{ transform:translateY(110vh); opacity:0; }
+  }
+  @keyframes sway{
+    0%{ transform:translateX(0) rotate(0deg) }
+    50%{ transform:translateX(35px) rotate(15deg) }
+    100%{ transform:translateX(0) rotate(0deg) }
+  }
+
+  /* Responsividade */
+  @media (max-width: 768px) {
+    h1 { font-size: 2.5rem; }
+    .buttons { gap: 15px; }
+    .btn { padding: 12px 24px; font-size: 1rem; }
+    .main-content { padding: 25px; }
+    .message { font-size: 1.2rem; }
+    .timeline { grid-template-columns: 1fr; }
+  }
+</style>
+</head>
+<body>
+
+  <!-- Partículas brilhantes -->
+  <div class="sparkles" id="sparkles"></div>
+
+  <!-- Bandeiras ao fundo -->
+  <div class="flags-bg" aria-hidden="true">
+    <!-- Coreia do Sul -->
+    <svg class="flag-korea" viewBox="0 0 400 260">
+      <rect x="10" y="10" width="380" height="240" rx="12" />
+      <circle cx="200" cy="130" r="42" />
+      <path d="M200,88 a42,42 0 0,1 0,84 a21,21 0 0,0 0,-42 a21,21 0 0,1 0,-42 Z" />
+      <g transform="translate(60,50) rotate(-25)">
+        <rect x="-30" y="-6" width="60" height="3"/>
+        <rect x="-30" y="0" width="60" height="3"/>
+        <rect x="-30" y="6" width="60" height="3"/>
+      </g>
+      <g transform="translate(340,210) rotate(-25)">
+        <rect x="-30" y="-6" width="60" height="3"/>
+        <rect x="-30" y="0"  width="60" height="3"/>
+        <rect x="-30" y="6"  width="60" height="3"/>
+      </g>
+      <g transform="translate(340,50) rotate(25)">
+        <rect x="-30" y="-6" width="60" height="3"/>
+        <rect x="-30" y="6"  width="60" height="3"/>
+      </g>
+      <g transform="translate(60,210) rotate(25)">
+        <rect x="-30" y="-6" width="60" height="3"/>
+        <rect x="-30" y="0"  width="30" height="3"/>
+        <rect x="0"   y="0"  width="30" height="3"/>
+        <rect x="-30" y="6"  width="60" height="3"/>
+      </g>
+    </svg>
+
+    <!-- Botafogo -->
+    <svg class="flag-botafogo" viewBox="0 0 400 480">
+      <path d="M200 30 C130 30, 80 60, 80 120 L80 250 C80 350, 150 410, 200 450 C250 410, 320 350, 320 250 L320 120 C320 60, 270 30, 200 30 Z"/>
+      <path d="M200 150 L214 190 L257 190 L222 215 L236 255 L200 230 L164 255 L178 215 L143 190 L186 190 Z"/>
+    </svg>
+  </div>
+
+  <div class="container">
+    <header>
+      <h1>Lorena & Raphael</h1>
+      <div class="buttons">
+        <button class="btn" onclick="showTimeline()">Nossa História</button>
+        <button class="btn" onclick="showPoem()">Poema</button>
+        <button class="btn" onclick="showGolden()">Golden Retriever</button>
+        <button class="btn petals-btn" onclick="createBlossoms()">Flores de Cerejeira</button>
+      </div>
+    </header>
+
+    <div class="main-content">
+      <p class="message">Bem-vindo ao nosso site especial! 💕</p>
+      <p class="message">Clique no botão das flores para uma surpresa romântica <span class="heart">❤</span></p>
+    </div>
+
+    <footer>
+      <p>Feito com todo carinho para você 💖</p>
+      <div class="signature">Com amor eterno, Raphael 💍</div>
+    </footer>
+  </div>
+
+<script>
+  // Criar partículas brilhantes
+  function createSparkles() {
+    const sparklesContainer = document.getElementById('sparkles');
+    
+    function addSparkle() {
+      const sparkle = document.createElement('div');
+      sparkle.className = 'sparkle';
+      sparkle.style.left = Math.random() * 100 + '%';
+      sparkle.style.animationDelay = Math.random() * 6 + 's';
+      sparkle.style.animationDuration = (Math.random() * 3 + 4) + 's';
+      sparklesContainer.appendChild(sparkle);
+      
+      setTimeout(() => {
+        sparkle.remove();
+      }, 8000);
+    }
+    
+    // Adicionar partículas continuamente
+    setInterval(addSparkle, 300);
+  }
+
+  // Iniciar partículas quando a página carregar
+  window.addEventListener('load', createSparkles);
+
+  function createBlossoms(){
+    const count = 30;
+    for(let i=0;i<count;i++){
+      setTimeout(()=>spawnOne(), i*150);
+    }
+  }
+
+  function spawnOne(){
+    const size = Math.random()*30 + 32;
+    const fallDuration = Math.random()*5 + 7;
+    const swayDuration = Math.random()*3 + 4;
+
+    const wrap = document.createElement('div');
+    wrap.className = 'blossom';
+    wrap.style.left = `${Math.random()*100}vw`;
+    wrap.style.width = `${size}px`;
+    wrap.style.height = `${size}px`;
+    wrap.style.animationDuration = `${fallDuration}s`;
+
+    const inner = document.createElementNS('http://www.w3.org/2000/svg','svg');
+    inner.setAttribute('class','blossom-inner');
+    inner.setAttribute('viewBox','0 0 100 100');
+    inner.style.animationDuration = `${swayDuration}s`;
+
+    const petal = document.createElementNS('http://www.w3.org/2000/svg','path');
+    petal.setAttribute('d',
+      'M50 8 C40 18,38 30,50 38 C62 30,60 18,50 8 Z'+
+      'M92 50 C82 40,70 38,62 50 C70 62,82 60,92 50 Z'+
+      'M50 92 C60 82,62 70,50 62 C38 70,40 82,50 92 Z'+
+      'M8 50 C18 40,30 38,38 50 C30 62,18 60,8 50 Z'+
+      'M72 28 C64 26,56 30,54 38 C62 40,70 36,72 28 Z'+
+      'M28 72 C36 74,44 70,46 62 C38 60,30 64,28 72 Z'+
+      'M28 28 C30 36,38 40,46 38 C44 30,36 26,28 28 Z'+
+      'M72 72 C70 64,62 60,54 62 C56 70,64 74,72 72 Z'
+    );
+    petal.setAttribute('fill','#ff9ac1');
+    petal.setAttribute('stroke','#ff5a98');
+    petal.setAttribute('stroke-width','1.5');
+
+    const center = document.createElementNS('http://www.w3.org/2000/svg','circle');
+    center.setAttribute('cx','50'); center.setAttribute('cy','50'); center.setAttribute('r','7');
+    center.setAttribute('fill','#ffd1e1'); center.setAttribute('stroke','#ff5a98'); center.setAttribute('stroke-width','1.2');
+
+    inner.appendChild(petal);
+    inner.appendChild(center);
+    wrap.appendChild(inner);
+    document.body.appendChild(wrap);
+
+    setTimeout(()=>wrap.remove(), fallDuration*1000 + 500);
+  }
+
+  function showTimeline(){
+    let photos="";
+    for(let i=1;i<=15;i++){
+      photos += `
+        <div class="timeline-item">
+          <div class="polaroid">
+            <div class="polaroid-photo">📸</div>
+            <div class="polaroid-caption">Momento especial ${i} - Nossa jornada de amor 💖</div>
+          </div>
+        </div>`;
+    }
+    document.body.innerHTML = `
+      <div class="sparkles" id="sparkles"></div>
+      <div class="flags-bg" aria-hidden="true">${document.querySelector('.flags-bg').innerHTML}</div>
+      <div class="container">
+        <header>
+          <h1 style="font-family: 'Playfair Display', serif; font-weight: 700;">Nossa História</h1>
+          <div class="buttons">
+            <button class="btn" onclick="location.reload()">Voltar</button>
+            <button class="btn petals-btn" onclick="createBlossoms()">Flores</button>
+          </div>
+        </header>
+        <div class="timeline">${photos}</div>
+        <footer>
+          <p>Cada momento é especial ao seu lado 💖</p>
+          <div class="signature">Com amor eterno, Raphael 💍</div>
+        </footer>
+      </div>`;
+    createSparkles();
+  }
+
+  function showPoem(){
+    document.body.innerHTML = `
+      <div class="sparkles" id="sparkles"></div>
+      <div class="flags-bg" aria-hidden="true">${document.querySelector('.flags-bg').innerHTML}</div>
+      <div class="container">
+        <header>
+          <h1 style="font-family: 'Playfair Display', serif; font-weight: 700;">Nosso Poema</h1>
+          <div class="buttons">
+            <button class="btn" onclick="location.reload()">Voltar</button>
+            <button class="btn petals-btn" onclick="createBlossoms()">Flores</button>
+          </div>
+        </header>
+        <div class="poem-container">
+          <p>Em cada amanhecer que desponta,</p>
+          <p>Seu sorriso é minha melodia,</p>
+          <p>Como flores que dançam na brisa,</p>
+          <p>Você trouxe magia à minha vida.</p>
+          <br>
+          <p>Nossos sonhos se entrelaçam suaves,</p>
+          <p>Como pétalas ao vento a voar,</p>
+          <p>E em cada momento que vivemos,</p>
+          <p>Nosso amor só cresce sem parar.</p>
+          <br>
+          <p style="text-align: center; font-size: 1.8rem; color: #d1006b;">💞 Para sempre juntos 💞</p>
+        </div>
+        <footer>
+          <p>Palavras do coração para você 💖</p>
+          <div class="signature">Com amor eterno, Raphael 💍</div>
+        </footer>
+      </div>`;
+    createSparkles();
+  }
+
+  function showGolden(){
+    document.body.innerHTML = `
+      <div class="sparkles" id="sparkles"></div>
+      <div class="flags-bg" aria-hidden="true">${document.querySelector('.flags-bg').innerHTML}</div>
+      <div class="container">
+        <header>
+          <h1 style="font-family: 'Playfair Display', serif; font-weight: 700;">Surpresa!</h1>
+          <div class="buttons">
+            <button class="btn" onclick="location.reload()">Voltar</button>
+            <button class="btn petals-btn" onclick="createBlossoms()">Flores</button>
+          </div>
+        </header>
+        <div class="golden-page">
+          <div class="golden-container">
+            <img src="ChatGPT_Image_26_de_ago_de_2025_16_16_45.png" alt="Golden Retriever com placa de pedido de casamento" class="golden-image" onerror="this.style.display='none'; document.getElementById('placeholderImage').style.display='block';">
+            <div class="timeline-img" style="font-size:1.5rem; background:#fff0f5; border:2px solid #ff66a3; padding:40px; border-radius:20px; display: none;" id="placeholderImage">🐶 Aqui vai a foto do Golden Retriever</div>
+            <p class="ribbon">Diz SIM pro Raphael, Lorena? 💍</p>
+          </div>
+        </div>
+        <footer>
+          <p>O que eu não aprendo a fazer por você? 💖</p>
+          <div class="signature">Com amor eterno, Raphael 💍</div>
+        </footer>
+      </div>`;
+    createSparkles();
+  }
+</script>
+</body>
+</html>
+
